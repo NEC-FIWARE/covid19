@@ -61,14 +61,6 @@
             :items="monitoringItems"
           />
         </section>
-        <div>
-          <app-link
-            :class="$style.button"
-            to="https://www.fukushihoken.metro.tokyo.lg.jp/iryo/kansen/monitoring.html"
-          >
-            {{ $t('最新のモニタリング項目の分析・総括コメントについて') }}
-          </app-link>
-        </div>
       </data-view>
     </client-only>
   </v-col>
@@ -79,8 +71,9 @@ import AppLink from '@/components/AppLink.vue'
 import DataView from '@/components/DataView.vue'
 import MonitoringItemsOverviewTableInfectionStatus from '@/components/MonitoringItemsOverviewTableInfectionStatus.vue'
 import MonitoringItemsOverviewTableMedicalSystem from '@/components/MonitoringItemsOverviewTableMedicalSystem.vue'
-import monitoringItemsData from '@/data/monitoring_items.json'
+//import monitoringItemsData from '@/data/monitoring_items.json'
 import { formatMonitoringItems } from '@/utils/formatMonitoringItems'
+import fiwareClient from '@/utils/fiwareClient'
 
 export default {
   components: {
@@ -89,12 +82,55 @@ export default {
     MonitoringItemsOverviewTableMedicalSystem,
     AppLink,
   },
+  // data() {
+  //   const monitoringItems = formatMonitoringItems(monitoringItemsData.data)
+  //   return {
+  //     monitoringItemsData,
+  //     monitoringItems,
+  //   }
+  // },
   data() {
-    const monitoringItems = formatMonitoringItems(monitoringItemsData.data)
-    return {
-      monitoringItemsData,
-      monitoringItems,
+
+    let initData = {
+        "(1)新規陽性者数": 0,
+        "(2)#7119（東京消防庁救急相談センター）における発熱等相談件数 ": 0,
+        "(3)新規陽性者における接触歴等不明者（人数）": 0,
+        "(3)新規陽性者における接触歴等不明者（増加比）": 0,
+        "(4)PCR・抗原検査（陽性率）": 0,
+        "(4)PCR・抗原検査（検査人数）": 0,
+        "(5)救急医療の東京ルールの適用件数": 0,
+        "(6)入院患者数": 0,
+        "(6)入院患者確保病床数": "0床",
+        "(7)重症患者数": 0,
+        "(7)重症患者確保病床数": "0床",
+        "総括コメント-感染状況": {
+            "level": 0,
+            "display": {
+                "@ja": "",
+                "@en": "0"
+            }
+        },
+        "総括コメント-医療提供体制": {
+            "level": 0,
+            "display": {
+                "@ja": "",
+                "@en": ""
+            }
+        }
     }
+
+    return {
+      monitoringItemsData: initData,
+      monitoringItems: formatMonitoringItems(initData),
+    }
+  },
+  async beforeCreate() {
+    // FiwareCLientを利用してサマリーを取得する
+    const entity = await fiwareClient.get('Covid19PatientsSummary')
+
+    // 検査人数からグラフデータを生成する
+    this.monitoringItemsData = entity
+    this.monitoringItems = formatMonitoringItems(entity.data)
   },
 }
 </script>

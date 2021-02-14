@@ -76,9 +76,11 @@
     </template>
     <template v-slot:footer>
       <open-data-link :url="url" />
+      <!--
       <p class="FooterNote">
         {{ $t('下記更新日時はオープンデータAPIの反映日時に準じています') }}
       </p>
+      -->
     </template>
   </data-view>
 </template>

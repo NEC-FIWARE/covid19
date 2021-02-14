@@ -7,10 +7,10 @@
         :table-data="patientsTable"
         :date="date"
         :info="sumInfoOfPatients"
-        :url="'https://catalog.data.metro.tokyo.lg.jp/dataset/t000010d0000000068'"
         :loaded="dataMargin >= 0"
         :error="$fetchState.error"
         :data-length="dataLength"
+        url="https://github.com/NEC-FIWARE/covid19"
         @on-change-items-per-page="onChangeItemsPerPage"
         @on-change-page="onChangePage"
       >
@@ -38,6 +38,7 @@
             </tr>
           </tbody>
         </template>
+        <!--
         <template v-slot:additionalDescription>
           <span>{{ $t('（注）') }}</span>
           <ul>
@@ -60,6 +61,7 @@
             </li>
           </ul>
         </template>
+        -->
       </data-table>
     </client-only>
   </v-col>
@@ -72,8 +74,7 @@ import VueI18n from 'vue-i18n'
 import { ThisTypedComponentOptionsWithRecordProps } from 'vue/types/options'
 
 import DataTable from '@/components/DataTable.vue'
-import Data from '@/data/data.json'
-import formatGraph from '@/utils/formatGraph'
+import fiwareClient from '@/utils/fiwareClient'
 import { DataType, formatTable, TableDateType } from '@/utils/formatTable'
 
 interface MetaData {
@@ -116,28 +117,44 @@ const options: ThisTypedComponentOptionsWithRecordProps<
   Props
 > = {
   components: { DataTable },
-  data() {
-    // 感染者数グラフ
-    const patientsGraph = formatGraph(Data.patients_summary.data)
-    const lastData = patientsGraph[patientsGraph.length - 1]
-    const lastDay = this.$d(new Date(lastData.label), 'date')
-    const dataLength = lastData.cumulative
-    const sumInfoOfPatients = {
-      lText: dataLength.toLocaleString(),
-      sText: this.$t('{date}の累計', { date: lastDay }),
-      unit: this.$t('人'),
-    }
+  // data() {
+  //   // 感染者数グラフ
+  //   const patientsGraph = formatGraph(Data.patients_summary.data)
+  //   const lastData = patientsGraph[patientsGraph.length - 1]
+  //   const lastDay = this.$d(new Date(lastData.label), 'date')
+  //   const dataLength = lastData.cumulative
+  //   const sumInfoOfPatients = {
+  //     lText: dataLength.toLocaleString(),
+  //     sText: this.$t('{date}の累計', { date: lastDay }),
+  //     unit: this.$t('人'),
+  //   }
 
+  //   return {
+  //     dataLength,
+  //     sumInfoOfPatients,
+  //     date: '',
+  //     page: 1,
+  //     itemsPerPage: 15,
+  //     endCursor: '',
+  //     patientsData: [],
+  //   }
+  // },
+  data() {
     return {
-      dataLength,
-      sumInfoOfPatients,
-      date: '',
+      dataLength: 0,
+      sumInfoOfPatients: {
+        lText: '0',
+        sText: this.$t('{date}の累計', { date: '2020-01-01' }),
+        unit: this.$t('人'),
+      },
+      date: '2020-01-01',
       page: 1,
       itemsPerPage: 15,
       endCursor: '',
       patientsData: [],
     }
   },
+
   computed: {
     patientsTable() {
       const end = this.page * this.itemsPerPage
@@ -146,34 +163,58 @@ const options: ThisTypedComponentOptionsWithRecordProps<
       return formatTable(currentPageData)
     },
     dataMargin() {
-      return this.patientsData.length - this.page * this.itemsPerPage
+      return 0
+      // return this.patientsData.length - this.page * this.itemsPerPage
     },
   },
   async fetch() {
+    // const { patientsData, metaData } = await this.fetchOpenAPI()
+    // this.patientsData = this.patientsData.concat(patientsData)
+    // this.endCursor = metaData.endCursor
+    // this.date = metaData.updated
+    // this.fetchIfNoCache()
+    if (this.patientsData.length !== 0) {
+      return
+    }
     const { patientsData, metaData } = await this.fetchOpenAPI()
+    this.patientsData = []
     this.patientsData = this.patientsData.concat(patientsData)
     this.endCursor = metaData.endCursor
     this.date = metaData.updated
+    this.dataLength = this.patientsData.length
+    this.sumInfoOfPatients.lText = this.patientsData.length.toLocaleString()
+    this.sumInfoOfPatients.sText = `${this.translateDate(
+      metaData.updated
+    )}の累計`
     this.fetchIfNoCache()
   },
   fetchOnServer: false, // i18nによる日付の変換ができないのでサーバーでは無効化
   methods: {
     async fetchOpenAPI() {
-      const endpoint = 'https://api.data.metro.tokyo.lg.jp'
-      const url =
-        `${endpoint}/v1/Covid19Patient?limit=${this.itemsPerPage}` +
-        (this.endCursor ? `&cursor=${encodeURIComponent(this.endCursor)}` : '')
+      // const endpoint = 'https://api.data.metro.tokyo.lg.jp'
+      // const url =
+      //   `${endpoint}/v1/Covid19Patient?limit=${this.itemsPerPage}` +
+      //   (this.endCursor ? `&cursor=${encodeURIComponent(this.endCursor)}` : '')
 
-      return await fetch(url)
-        .then((response) => response.json())
-        .then((data) => ({ patientsData: data[0], metaData: data[1] }))
-        .catch((error) => {
-          throw new Error(error.toString())
-        })
+      // return await fetch(url)
+      //   .then((response) => response.json())
+      //   .then((data) => ({ patientsData: data[0], metaData: data[1] }))
+      //   .catch((error) => {
+      //     throw new Error(error.toString())
+      //   })
+      let patientsData = []
+      const entity = await fiwareClient.get('Covid19PatientsListAggregated')
+      if (entity.data.length) {
+        patientsData = entity.data
+      }
+      return {
+        patientsData,
+        metaData: { endCursor: '', updated: entity.date },
+      }
     },
     fetchIfNoCache() {
       // メモリ上に次ページのデータがなければ先読みしてページネーション時の待ち時間を減らす
-      if (this.dataMargin <= 0) setTimeout(() => this.$fetch(), 0)
+      // if (this.dataMargin <= 0) setTimeout(() => this.$fetch(), 0)
     },
     onChangeItemsPerPage(itemsPerPage) {
       this.itemsPerPage = itemsPerPage

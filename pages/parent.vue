@@ -5,7 +5,7 @@
     </page-header>
     <static-card>
       <h3>
-        <app-link to="https://www.tgs.metro.tokyo.lg.jp/" :icon-size="24"
+        <app-link to="https://github.com/NEC-FIWARE/covid19" :icon-size="24"
           >{{ $t('TokyoGlobalStudio') }}
         </app-link>
       </h3>
@@ -19,9 +19,7 @@
     </static-card>
     <static-card>
       <h3>
-        <app-link
-          to="https://tokyodouga.jp/playlist/ohayoschool.html"
-          :icon-size="24"
+        <app-link to="https://github.com/NEC-FIWARE/covid19" :icon-size="24"
           >{{ $t('TOKYOおはようスクール') }}
         </app-link>
       </h3>
@@ -31,9 +29,7 @@
     </static-card>
     <static-card>
       <h3>
-        <app-link
-          to="https://www.kyoiku.metro.tokyo.lg.jp/school/content/learning_support.html"
-          :icon-size="24"
+        <app-link to="https://github.com/NEC-FIWARE/covid19" :icon-size="24"
           >{{ $t('学びの支援サイト') }}
         </app-link>
       </h3>
@@ -65,7 +61,7 @@
         <li>
           {{ $t('手洗い、咳エチケット等により、感染予防に努めてください。')
           }}<br />
-          <app-link to="https://tokyodouga.jp/lViN9C_BS-0.html" :icon-size="16"
+          <app-link to="https://github.com/NEC-FIWARE/covid19" :icon-size="16"
             >{{ $t('【参考】感染症予防のための正しい手洗い方法（動画）') }}
           </app-link>
         </li>
@@ -85,9 +81,7 @@
         <li>
           {{ $t('各保健所の電話番号について') }}
           <br />
-          <app-link
-            to="https://www.fukushihoken.metro.tokyo.lg.jp/iryo/kansen/coronasodan.html"
-            :icon-size="16"
+          <app-link to="https://github.com/NEC-FIWARE/covid19" :icon-size="16"
             >{{ $t('「新型コロナウイルス感染症にかかる相談窓口について」') }}
           </app-link>
         </li>

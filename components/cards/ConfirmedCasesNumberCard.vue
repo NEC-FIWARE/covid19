@@ -9,25 +9,11 @@
         :date="date"
         :unit="$t('人')"
         :by-date="true"
-        :url="'https://catalog.data.metro.tokyo.lg.jp/dataset/t000010d0000000068'"
+        :url="'https://github.com/NEC-FIWARE/covid19'"
       >
-        <template v-slot:description>
-          <app-link
-            :to="`${
-              $i18n.locale !== 'ja' ? $i18n.locale : ''
-            }/cards/positive-number-by-developed-date`"
-            class="Description-Link"
-          >
-            {{ $t('発症日別による陽性者数の推移はこちら') }}
-          </app-link>
-        </template>
+        <!--
         <template v-slot:additionalDescription>
           <div class="Description-ExternalLink">
-            <app-link
-              to="https://www.fukushihoken.metro.tokyo.lg.jp/iryo/kansen/todokedehcyouseisya.html"
-            >
-              {{ $t('65歳以上の新規陽性者数の推移及び届出保健所別の内訳') }}
-            </app-link>
           </div>
           <span>{{ $t('（注）') }}</span>
           <ul>
@@ -42,31 +28,48 @@
             </li>
           </ul>
         </template>
+        -->
       </time-bar-chart>
     </client-only>
   </v-col>
 </template>
 
 <script>
-import AppLink from '@/components/AppLink.vue'
 import TimeBarChart from '@/components/TimeBarChart.vue'
-import Data from '@/data/data.json'
+import fiwareClient from '@/utils/fiwareClient'
 import formatGraph from '@/utils/formatGraph'
 
 export default {
   components: {
     TimeBarChart,
-    AppLink,
   },
-  data() {
-    // 感染者数グラフ
-    const patientsGraph = formatGraph(Data.patients_summary.data)
-    const date = Data.patients_summary.date
+  // data() {
+  //   // 感染者数グラフ
+  //   const patientsGraph = formatGraph(Data.patients_summary.data)
+  //   const date = Data.patients_summary.date
 
+  //   return {
+  //     patientsGraph,
+  //     date,
+  //   }
+  // },
+  data() {
     return {
-      patientsGraph,
-      date,
+      patientsGraph: [{ label: '2020-01-01', transition: 0, cumulative: 0 }],
+      date: '2020/01/01 00:00',
     }
+  },
+  async beforeCreate() {
+    // FiwareCLientを利用して陽性者数を取得する
+    const entity = await fiwareClient.get('Covid19PatientsDailyAggregated')
+
+    // 相談件数からグラフデータを生成する
+    if (entity.data.length) {
+      this.patientsGraph = await formatGraph(entity.data)
+    }
+
+    // 日付データを設定する
+    this.date = entity.date
   },
 }
 </script>

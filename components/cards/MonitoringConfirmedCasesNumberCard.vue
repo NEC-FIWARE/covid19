@@ -13,7 +13,7 @@
         :data-labels="dataLabels"
         :table-labels="tableLabels"
         :unit="$t('人')"
-        url="https://catalog.data.metro.tokyo.lg.jp/dataset/t000010d0000000068"
+        url="https://github.com/NEC-FIWARE/covid19"
       >
         <template v-slot:additionalDescription>
           <span>{{ $t('（注）') }}</span>
@@ -43,7 +43,8 @@
 
 <script>
 import MonitoringConfirmedCasesChart from '@/components/MonitoringConfirmedCasesChart.vue'
-import Data from '@/data/daily_positive_detail.json'
+import fiwareClient from '@/utils/fiwareClient'
+// import Data from '@/data/daily_positive_detail.json'
 import {
   getNumberToFixedFunction,
   getNumberToLocaleStringFunction,
@@ -53,8 +54,63 @@ export default {
   components: {
     MonitoringConfirmedCasesChart,
   },
+  // data() {
+  //   const [patientsCount, sevenDayMoveAverages, labels] = Data.data.reduce(
+  //     (res, data) => {
+  //       res[0].push(data.count)
+  //       res[1].push(data.weekly_average_count)
+  //       res[2].push(data.diagnosed_date)
+  //       return res
+  //     },
+  //     [[], [], []]
+  //   )
+  //   const chartData = [patientsCount, sevenDayMoveAverages]
+  //   const dataLabels = [this.$t('陽性者数'), this.$t('７日間移動平均')]
+  //   const tableLabels = [this.$t('陽性者数'), this.$t('７日間移動平均')]
+  //   const date = Data.date
+
+  //   const getFormatter = (columnIndex) => {
+  //     // モニタリング指標(1)新規陽性者数の7日間移動平均は小数点第1位まで表示する。
+  //     if (columnIndex === 1) {
+  //       return getNumberToFixedFunction(1)
+  //     }
+  //     return getNumberToLocaleStringFunction()
+  //   }
+
+  //   return {
+  //     chartData,
+  //     date,
+  //     labels,
+  //     dataLabels,
+  //     tableLabels,
+  //     getFormatter,
+  //   }
+  // },
   data() {
-    const [patientsCount, sevenDayMoveAverages, labels] = Data.data.reduce(
+    const getFormatter = (columnIndex) => {
+      // モニタリング指標(1)新規陽性者数の7日間移動平均は小数点第1位まで表示する。
+      if (columnIndex === 1) {
+        return getNumberToFixedFunction(1)
+      }
+      return getNumberToLocaleStringFunction()
+    }
+    return {
+      chartData: [[0], [0]],
+      date: '2020/01/01 00:00',
+      labels: ['2020/01/01 00:00'],
+      dataLabels: [this.$t('陽性者数'), this.$t('７日間移動平均')],
+      tableLabels: [this.$t('陽性者数'), this.$t('７日間移動平均')],
+      getFormatter,
+    }
+  },
+  async beforeCreate() {
+    // FiwareCLientを利用して陽性者数を取得する
+    const entity = await fiwareClient.get('Covid19PatientsDailyAggregated')
+    if (entity.data.length === 0) {
+      return
+    }
+
+    const [patientsCount, sevenDayMoveAverages, labels] = entity.data.reduce(
       (res, data) => {
         res[0].push(data.count)
         res[1].push(data.weekly_average_count)
@@ -63,27 +119,9 @@ export default {
       },
       [[], [], []]
     )
-    const chartData = [patientsCount, sevenDayMoveAverages]
-    const dataLabels = [this.$t('陽性者数'), this.$t('７日間移動平均')]
-    const tableLabels = [this.$t('陽性者数'), this.$t('７日間移動平均')]
-    const date = Data.date
-
-    const getFormatter = (columnIndex) => {
-      // モニタリング指標(1)新規陽性者数の7日間移動平均は小数点第1位まで表示する。
-      if (columnIndex === 1) {
-        return getNumberToFixedFunction(1)
-      }
-      return getNumberToLocaleStringFunction()
-    }
-
-    return {
-      chartData,
-      date,
-      labels,
-      dataLabels,
-      tableLabels,
-      getFormatter,
-    }
+    this.chartData = [patientsCount, sevenDayMoveAverages]
+    this.date = entity.date
+    this.labels = labels
   },
 }
 </script>

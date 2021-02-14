@@ -6,6 +6,7 @@
         :title-id="'details-of-confirmed-cases'"
         :date="date"
       >
+        <!--
         <template v-slot:additionalDescription>
           <span>{{ $t('（注）') }}</span>
           <ul>
@@ -33,10 +34,12 @@
             </li>
           </ul>
         </template>
+        -->
         <confirmed-cases-details-table
           :aria-label="$t('検査陽性者の状況')"
           v-bind="confirmedCases"
         />
+        <!--
         <div>
           <app-link
             :class="$style.button"
@@ -45,6 +48,7 @@
             {{ $t('死亡日別による死亡者数の推移はこちら') }}
           </app-link>
         </div>
+        -->
       </data-view>
     </client-only>
   </v-col>
@@ -53,29 +57,54 @@
 <script>
 import dayjs from 'dayjs'
 
-import AppLink from '@/components/AppLink.vue'
 import ConfirmedCasesDetailsTable from '@/components/ConfirmedCasesDetailsTable.vue'
 import DataView from '@/components/DataView.vue'
-import Data from '@/data/data.json'
-import formatConfirmedCases from '@/utils/formatConfirmedCases'
+import fiwareClient from '@/utils/fiwareClient'
 
 export default {
   components: {
     DataView,
     ConfirmedCasesDetailsTable,
-    AppLink,
   },
-  data() {
-    const mainSummary = Data.main_summary
-    // 検査陽性者の状況
-    const confirmedCases = formatConfirmedCases(mainSummary)
+  // data() {
+  //  const mainSummary = Data.main_summary
+  //  // 検査陽性者の状況
+  //  const confirmedCases = formatConfirmedCases(mainSummary)
 
-    const date = dayjs(mainSummary.children[0].date).format('YYYY/MM/DD HH:mm')
+  //  const date = dayjs(mainSummary.children[0].date).format('YYYY/MM/DD HH:mm')
+
+  //  return {
+  //    confirmedCases,
+  //    date,
+  //  }
+  // },
+  data() {
+    const confirmedCases = {
+      date: '2020/01/01 00:00:00',
+      陽性者数: 0,
+      入院中: 0,
+      軽症中等症: 0,
+      重症: 0,
+      宿泊療養: 0,
+      自宅療養: 0,
+      調査中: 0,
+      死亡: 0,
+      退院: 0,
+      検査実施人数: 0,
+      検査実施件数: 0,
+      陰性確認数: 0,
+      コールセンター相談件数: 0,
+    }
 
     return {
       confirmedCases,
-      date,
+      date: '2020/01/01 00:00',
     }
+  },
+  async beforeCreate() {
+    const entity = await fiwareClient.get('Covid19PatientsSummary')
+    this.confirmedCases = entity.data.summary
+    this.date = dayjs(entity.data.summary.date).format('YYYY/MM/DD HH:mm')
   },
 }
 </script>

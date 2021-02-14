@@ -4,10 +4,6 @@
       <page-header :icon-path="headerItem.iconPath">{{
         headerItem.title
       }}</page-header>
-      <div class="UpdatedAt">
-        <span>{{ $t('最終更新') }}</span>
-        <time :datetime="updatedAt">{{ formattedDateForDisplay }}</time>
-      </div>
       <div
         v-show="!['ja', 'ja-basic'].includes($i18n.locale)"
         class="Annotation"
@@ -16,12 +12,10 @@
       </div>
     </div>
     <whats-new class="mb-4" :items="newsItems" :is-emergency="false" />
-    <monitoring-comment-card />
-    <lazy-tokyo-alert-card v-if="TokyoAlert.alert" />
     <lazy-static-info
       v-if="$vuetify.breakpoint.smAndUp || showStaticInfo"
       class="mb-4"
-      :url="'https://www.fukushihoken.metro.tokyo.lg.jp/iryo/kansen/coronasodan.html'"
+      :url="'https://github.com/NEC-FIWARE/covid19'"
       :text="$t('自分や家族の症状に不安や心配があればまずは電話相談をどうぞ')"
       :btn-text="$t('相談の手順を見る')"
     />
@@ -33,42 +27,26 @@ import { mdiChartTimelineVariant } from '@mdi/js'
 import Vue from 'vue'
 import { MetaInfo } from 'vue-meta'
 
-import MonitoringCommentCard from '@/components/MonitoringCommentCard.vue'
 import PageHeader from '@/components/PageHeader.vue'
 import WhatsNew from '@/components/WhatsNew.vue'
-import Data from '@/data/data.json'
 import News from '@/data/news.json'
-import TokyoAlert from '@/data/tokyo_alert.json'
-import { convertDatetimeToISO8601Format } from '@/utils/formatDate'
 
 export default Vue.extend({
   components: {
     PageHeader,
     WhatsNew,
-    MonitoringCommentCard,
   },
   data() {
-    const { lastUpdate } = Data
-
     return {
-      TokyoAlert,
       headerItem: {
         iconPath: mdiChartTimelineVariant,
         title: this.$t('都内の最新感染動向'),
       },
-      lastUpdate,
       newsItems: News.newsItems,
       showStaticInfo: false,
     }
   },
-  computed: {
-    updatedAt() {
-      return convertDatetimeToISO8601Format(this.$data.lastUpdate)
-    },
-    formattedDateForDisplay() {
-      return `${this.$d(new Date(this.$data.lastUpdate), 'dateTime')} JST`
-    },
-  },
+  computed: {},
   methods: {
     onScroll() {
       this.showStaticInfo = true

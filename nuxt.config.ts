@@ -178,7 +178,7 @@ const config: NuxtConfig = {
     whitelistPatterns: [/(col|row)/],
   },
   manifest: {
-    name: '東京都 新型コロナウイルス感染症対策サイト',
+    name: '新型コロナウイルス感染症対策サイト',
     theme_color: '#00a040',
     background_color: '#ffffff',
     display: 'standalone',

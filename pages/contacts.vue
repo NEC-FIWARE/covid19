@@ -24,6 +24,7 @@
           </tr>
         </thead>
         <tbody>
+          <!--
           <tr>
             <td class="content importantContact" v-bind="headingAttrs">
               {{ $t('新型コロナウイルス感染症の予防・検査・医療に関すること') }}
@@ -172,6 +173,7 @@
             <td class="bureau">{{ $t('環境局') }}</td>
             <td class="tel"><a href="tel:03-5388-3581">03-5388-3581</a></td>
           </tr>
+          -->
         </tbody>
       </table>
     </div>

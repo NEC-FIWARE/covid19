@@ -15,7 +15,6 @@
             :src="logoSrc"
             width="111"
             height="28"
-            :alt="$t('東京都')"
           />
           <div class="SideNavigation-HeaderText">
             {{ $t('menu/新型コロナウイルス感染症') }}<br />{{
@@ -55,31 +54,19 @@
 
       <footer class="SideNavigation-Footer">
         <div class="SideNavigation-Social">
-          <app-link
-            to="https://line.me/R/ti/p/%40822sysfc"
-            :show-icon="false"
-            class="SideNavigation-SocialLink"
-          >
+          <app-link to="" :show-icon="false" class="SideNavigation-SocialLink">
             <picture>
               <source srcset="/line.webp" type="image/webp" />
               <img src="/line.png" width="130" height="130" alt="LINE" />
             </picture>
           </app-link>
-          <app-link
-            to="https://twitter.com/tokyo_bousai"
-            :show-icon="false"
-            class="SideNavigation-SocialLink"
-          >
+          <app-link to="" :show-icon="false" class="SideNavigation-SocialLink">
             <picture>
               <source srcset="/twitter.webp" type="image/webp" />
               <img src="/twitter.png" width="130" height="130" alt="Twitter" />
             </picture>
           </app-link>
-          <app-link
-            to="https://www.facebook.com/tochokoho"
-            :show-icon="false"
-            class="SideNavigation-SocialLink"
-          >
+          <app-link to="" :show-icon="false" class="SideNavigation-SocialLink">
             <picture>
               <source srcset="/facebook.webp" type="image/webp" />
               <img
@@ -90,21 +77,13 @@
               />
             </picture>
           </app-link>
-          <app-link
-            to="https://github.com/tokyo-metropolitan-gov/covid19"
-            :show-icon="false"
-            class="SideNavigation-SocialLink"
-          >
+          <app-link to="" :show-icon="false" class="SideNavigation-SocialLink">
             <picture>
               <source srcset="/github.webp" type="image/webp" />
               <img src="/github.png" width="130" height="130" alt="GitHub" />
             </picture>
           </app-link>
-          <app-link
-            to="https://www.youtube.com/user/tokyo/videos"
-            :show-icon="false"
-            class="SideNavigation-SocialLink"
-          >
+          <app-link to="" :show-icon="false" class="SideNavigation-SocialLink">
             <picture>
               <source srcset="/youtube.webp" type="image/webp" />
               <img src="/youtube.png" width="130" height="130" alt="YouTube" />
@@ -127,16 +106,7 @@
           </template>
         </i18n>
         <br />
-        <small class="SideNavigation-Copyright">
-          &copy; 2020 Tokyo Metropolitan Government
-        </small>
-        <div class="SideNavigation-GMark">
-          <img
-            src="/.netlify/functions/g-mark"
-            width="200"
-            alt="GOOD DESIGN AWARD 2020年度受賞"
-          />
-        </div>
+        <small class="SideNavigation-Copyright">Powered by FIWARE Orion</small>
       </footer>
     </div>
   </div>
@@ -194,81 +164,77 @@ export default Vue.extend({
         {
           svg: 'CovidIcon',
           title: this.$t('新型コロナウイルス感染症が心配なときに.nav'),
-          link:
-            'https://www.fukushihoken.metro.tokyo.lg.jp/iryo/kansen/coronasodan.html',
+          link: 'https://github.com/NEC-FIWARE/covid19',
         },
         {
           svg: 'CovidIcon',
           title: this.$t('新型コロナウイルスの感染が判明した方へ'),
-          link:
-            'https://www.fukushihoken.metro.tokyo.lg.jp/oshirase/corona_0401.html',
+          link: 'https://github.com/NEC-FIWARE/covid19',
         },
         {
           svg: 'SupportIcon',
           title: this.$t(
             '新型コロナウイルス感染症の患者発生状況に関するよくあるご質問'
           ),
-          link:
-            'https://www.fukushihoken.metro.tokyo.lg.jp/iryo/kansen/coronafaq.html',
+          link: 'https://github.com/NEC-FIWARE/covid19',
         },
         {
           svg: 'MaskTrashIcon',
           title: this.$t('ご家庭でのマスク等の捨て方'),
-          link:
-            'https://www.kankyo.metro.tokyo.lg.jp/resource/500200a20200221162304660.files/200327_chirashi.pdf',
+          link: 'https://github.com/NEC-FIWARE/covid19',
           divider: true,
         },
-        {
-          svg: 'ParentIcon',
-          title: this.$t('お子様をお持ちの皆様へ'),
-          link: this.localePath('/parent'),
-        },
+        // {
+        //  svg: 'ParentIcon',
+        //  title: this.$t('お子様をお持ちの皆様へ'),
+        //  link: this.localePath('/parent'),
+        // },
         {
           iconPath: mdiAccountMultiple,
           title: this.$t('都民の皆様へ'),
-          link: 'https://www.metro.tokyo.lg.jp/tosei/tosei/news/2019-ncov.html',
+          link: 'https://github.com/NEC-FIWARE/covid19',
         },
         {
           iconPath: mdiDomain,
           title: this.$t('企業の皆様・はたらく皆様へ'),
-          link: this.localePath('/worker'),
+          link: 'https://github.com/NEC-FIWARE/covid19',
           divider: true,
         },
-        {
-          title: this.$t('東京都新型コロナウイルス感染症対策本部報'),
-          link:
-            'https://www.bousai.metro.tokyo.lg.jp/taisaku/saigai/1010035/index.html',
-        },
-        {
-          title: this.$t('東京都 新型コロナウイルス感染症 支援情報ナビ'),
-          link: 'https://covid19.supportnavi.metro.tokyo.lg.jp/',
-        },
-        {
-          title: this.$t('東京iCDC（東京感染症対策センター）からのお知らせ'),
-          link: 'https://note.com/tokyo_icdc',
-        },
-        {
-          title: this.$t(
-            '新型コロナウイルス感染症都民向け感染予防ハンドブック'
-          ),
-          link:
-            'https://www.fukushihoken.metro.tokyo.lg.jp/iryo/kansen/kannsenyobouhandbook.html',
-        },
-        {
-          title: this.$t('都民利用施設・都主催イベントに関する情報'),
-          link:
-            'https://www.seisakukikaku.metro.tokyo.lg.jp/information/event00.html',
-        },
-        {
-          title: this.$t('東京都における滞在人口の増減'),
-          link:
-            'https://www.seisakukikaku.metro.tokyo.lg.jp/information/corona-people-flow-analysis.html',
-        },
-        {
-          title: this.$t('知事からのメッセージ'),
-          link:
-            'https://www.metro.tokyo.lg.jp/tosei/governor/governor/katsudo/2020/03/03_00.html',
-        },
+        // {
+        //   title: this.$t('東京都新型コロナウイルス感染症対策本部報'),
+        //   link:
+        //     'https://www.bousai.metro.tokyo.lg.jp/taisaku/saigai/1010035/index.html',
+        // },
+        // {
+        //   title: this.$t('東京都 新型コロナウイルス感染症 支援情報ナビ'),
+        //   link: 'https://covid19.supportnavi.metro.tokyo.lg.jp/',
+        // },
+        // {
+        //   title: this.$t('東京iCDC（東京感染症対策センター）からのお知らせ'),
+        //   link: 'https://note.com/tokyo_icdc',
+        // },
+        // {
+        //   title: this.$t(
+        //     '新型コロナウイルス感染症都民向け感染予防ハンドブック'
+        //   ),
+        //   link:
+        //     'https://www.fukushihoken.metro.tokyo.lg.jp/iryo/kansen/kannsenyobouhandbook.html',
+        // },
+        // {
+        //   title: this.$t('都民利用施設・都主催イベントに関する情報'),
+        //   link:
+        //     'https://www.seisakukikaku.metro.tokyo.lg.jp/information/event00.html',
+        // },
+        // {
+        //   title: this.$t('東京都における滞在人口の増減'),
+        //   link:
+        //     'https://www.seisakukikaku.metro.tokyo.lg.jp/information/corona-people-flow-analysis.html',
+        // },
+        // {
+        //   title: this.$t('知事からのメッセージ'),
+        //   link:
+        //     'https://www.metro.tokyo.lg.jp/tosei/governor/governor/katsudo/2020/03/03_00.html',
+        // },
         {
           title: this.$t('当サイトについて'),
           link: this.localePath('/about'),
@@ -278,9 +244,13 @@ export default Vue.extend({
           link: this.localePath('/contacts'),
         },
         {
-          title: this.$t('東京都公式ホームページ'),
-          link: 'https://www.metro.tokyo.lg.jp/',
+          title: this.$t('GitHub リポジトリ'),
+          link: 'https://github.com/NEC-FIWARE/covid19',
         },
+        // {
+        //   title: this.$t('東京都公式ホームページ'),
+        //   link: 'https://www.metro.tokyo.lg.jp/',
+        // },
       ]
     },
     logoSrc(): string {
@@ -288,13 +258,13 @@ export default Vue.extend({
         case 'ja':
         case 'ja-basic':
         case 'zh-tw':
-          return '/logo.svg'
+          return '/logo.png'
         case 'ko':
-          return '/logo-ko.png'
+          return '/logo.png'
         case 'zh-cn':
-          return '/logo-zh-cn.png'
+          return '/logo.png'
         default:
-          return '/logo-en.png'
+          return '/logo.png'
       }
     },
   },
