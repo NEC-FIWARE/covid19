@@ -39,7 +39,7 @@ import ScaleLoader from 'vue-spinner/src/ScaleLoader.vue'
 import DevelopmentModeMark from '@/components/DevelopmentModeMark.vue'
 import NoScript from '@/components/NoScript.vue'
 import SideNavigation from '@/components/SideNavigation.vue'
-import { convertDateToSimpleFormat } from '@/utils/formatDate'
+// import { convertDateToSimpleFormat } from '@/utils/formatDate'
 import { getLinksLanguageAlternative } from '@/utils/i18nUtils'
 
 type LocalData = {
@@ -115,7 +115,7 @@ export default Vue.extend({
       link: [
         {
           rel: 'canonical',
-          href: `https://stopcovid19.metro.tokyo.lg.jp${this.$route.path}`,
+          href: `https://covid19.fiware-testbed.jp${this.$route.path}`,
         },
         ...linksAlternate,
       ],
@@ -131,14 +131,15 @@ export default Vue.extend({
         {
           hid: 'description',
           name: 'description',
-          content: '当サイトは新型コロナウイルス感染症 (COVID-19) に関する最新情報を提供するために、開設したものです。',
+          content:
+            '当サイトは新型コロナウイルス感染症 (COVID-19) に関する最新情報を提供するために、開設したものです。',
         },
         {
           hid: 'og:site_name',
           property: 'og:site_name',
-          content: `${this.$t(
-            '新型コロナウイルス感染症'
-          )} ${this.$t('対策サイト')}`,
+          content: `${this.$t('新型コロナウイルス感染症')} ${this.$t(
+            '対策サイト'
+          )}`,
         },
         ogLocale,
         {
@@ -149,7 +150,8 @@ export default Vue.extend({
         {
           hid: 'og:description',
           property: 'og:description',
-          content: '当サイトは新型コロナウイルス感染症 (COVID-19) に関する最新情報を提供するために、開設したものです。',
+          content:
+            '当サイトは新型コロナウイルス感染症 (COVID-19) に関する最新情報を提供するために、開設したものです。',
         },
         {
           hid: 'og:image',
@@ -159,9 +161,9 @@ export default Vue.extend({
         {
           hid: 'apple-mobile-web-app-title',
           name: 'apple-mobile-web-app-title',
-          content: `${this.$t(
-            '新型コロナウイルス感染症'
-          )} ${this.$t('対策サイト')}`,
+          content: `${this.$t('新型コロナウイルス感染症')} ${this.$t(
+            '対策サイト'
+          )}`,
         },
         {
           hid: 'twitter:image',

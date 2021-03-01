@@ -27,7 +27,7 @@ const options: ThisTypedComponentOptionsWithRecordProps<
 > = {
   data() {
     return {
-      showCardsTab: false,
+      showCardsTab: true,
     }
   },
   methods: {
