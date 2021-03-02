@@ -101,6 +101,9 @@ const options: ThisTypedComponentOptionsWithRecordProps<
     // タブ切り替え時にグラフ幅を再計算
     EventBus.$on(TOGGLE_EVENT, () => setTimeout(() => this.adjustChartWidth()))
   },
+  updated() {
+    this.adjustChartWidth()
+  },
   beforeDestroy() {
     window.removeEventListener('resize', this.handleResize)
     EventBus.$off(TOGGLE_EVENT)
