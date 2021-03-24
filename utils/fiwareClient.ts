@@ -28,8 +28,7 @@ const fiwareClient = {
     if (brokerVersion === 'ld') {
       url = `${brokerUrl}/ngsi-ld/v1/entities/${entityId}?options=keyValues`
       headers = {
-        'Fiware-Service': brokerService,
-        'Fiware-ServicePath': brokerPath,
+        'NGSILD-Tenant': brokerService,
         LINK: `<${brokerContext}>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"`,
       }
     } else {
